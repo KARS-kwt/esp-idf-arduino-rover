@@ -1,53 +1,52 @@
+/***************************************************************************
+* Example sketch for the MPU9250_WE library
+*
+* This sketch checks which device you have.
+* 
+* For further information visit my blog:
+*
+* https://wolles-elektronikkiste.de/mpu9250-9-achsen-sensormodul-teil-1  (German)
+* https://wolles-elektronikkiste.de/en/mpu9250-9-axis-sensor-module-part-1  (English)
+* 
+***************************************************************************/
 
-#include "MPU9250.h"
+#include <MPU9250_WE.h>
+#include <Wire.h>
+#define MPU9250_ADDR 0x68
+MPU9250_WE myMPU9250 = MPU9250_WE(MPU9250_ADDR);
 
-MPU9250 IMU(i2c0, 0x68);
-int status;
-
-void setup()
-{
-  // serial to display data
-  Serial.begin(9600);
-  while (!Serial)
-  {
-  }
-  // start communication with IMU
-  status = IMU.begin();
-  if (status < 0)
-  {
-    Serial.println("IMU initialization unsuccessful");
-    Serial.println("Check IMU wiring or try cycling power");
-    Serial.print("Status: ");
-    Serial.println(status);
-    while (1)
-    {
-    }
-  }
-  // setting the accelerometer full scale range to +/-8G
-  IMU.setAccelRange(MPU9250::ACCEL_RANGE_2G);
-  // setting the gyroscope full scale range to +/-500 deg/s
-  IMU.setGyroRange(MPU9250::GYRO_RANGE_250DPS);
-  // setting DLPF bandwidth to 20 Hz
-  IMU.setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_41HZ);
-  // setting SRD to 19 for a 50 Hz update rate
-  // IMU.setSrd(19);
-  IMU.calibrateMag();
+void setup() {
+  byte whoAmICode = 0x00;
+  Serial.begin(115200);
+  Wire.begin();
+  myMPU9250.init();
+  
+  whoAmICode = myMPU9250.whoAmI();
+  Serial.print("WhoAmI Register: 0x");
+  Serial.println(whoAmICode, HEX);
+  switch(whoAmICode){
+    case(0x70):
+      Serial.println("Your device is an MPU6500.");
+      Serial.println("The MPU6500 does not have a magnetometer."); 
+      break;
+    case(0x71):
+      Serial.println("Your device is an MPU9250");
+      break;
+    case(0x73):
+      Serial.println("Your device is an MPU9255");
+      Serial.println("Not sure if it works with this library, just try");
+      break;
+    case(0x75):
+      Serial.println("Your device is probably an MPU6515"); 
+      Serial.println("Not sure if it works with this library, just try");
+      break;
+    case(0x00):
+      Serial.println("Can't connect to your device. Check all connections.");
+      break;
+    default:
+      Serial.println("Unknown device - it may work with this library or not, just try"); 
+  }  
 }
 
-#define RAD_TO_DEG 57.295779513082320876798154814105
-
-void loop()
-{
-  // read the sensor
-  IMU.readSensor();
-
-  // display the data Accel(%.6lf, %.6lf, %.6lf) Gyro(%.6lf, %.6lf, %.6lf) 
-  // printf("\r\n Mag(%.6f, %.6f, %.6f) Yaw %.6f ", 
-  //   // IMU.getAccelX_mss(), IMU.getAccelX_mss(), IMU.getAccelY_mss(), IMU.getAccelZ_mss(), IMU.getGyroX_rads(), IMU.getGyroY_rads(), IMU.getGyroZ_rads(), 
-  //   IMU.getMagX_uT(), IMU.getMagY_uT(), IMU.getMagZ_uT(), float(atan2(IMU.getMagY_uT(), IMU.getMagX_uT())) * RAD_TO_DEG
-  // );
-  Serial.printf("\r\n Yaw %.6f ", 
-    float(atan2(IMU.getMagY_uT(), IMU.getMagX_uT())) * RAD_TO_DEG
-  );
-  delay(20);
+void loop() {
 }

@@ -20,13 +20,13 @@ Then, in the project's `main/CMakeLists.txt`, add the library as a requirement (
 set(requires "bluepad32" "bluepad32_arduino" "arduino" "btstack" "ArduinoJson")
 ```
 
-### Adding arduino library (Example ESP32-Arduino-MPU9250)
+### Adding arduino library (Example MPU9250)
 (This needs to be redone if edits are made to the arduino submodule which are not synced to this repo)
 
 Not all libraries are configured as esp-idf components, but can still be added as a standard arduino library. To do this, navigate to `components\arduino\libraries` and clone (or add submodule) the library repo there. 
 
 ```bash
-components\arduino\libraries> git clone https://github.com/yelvlab/ESP32-Arduino-MPU9250.git MPU9250/
+components\arduino\libraries> git clone https://github.com/hideakitai/MPU9250.git MPU9250/
 ```
 > Notice the renaming of the repo to `MPU9250` to match the library header name.
 
@@ -34,8 +34,7 @@ Next, add the source files of the library into `components\arduino\CMakeLists.tx
 
 ```cmake
 set(LIBRARY_SRCS
-  libraries/MPU9250/I2Cbus.cpp <---
-  libraries/MPU9250/MPU9250.cpp <---
+  libraries/MPU9250/file1.cpp <--- just an example 
   ...
 ```
 
