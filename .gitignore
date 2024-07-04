@@ -2,3 +2,7 @@ build/
 sdkconfig.old
 sdkconfig
 *.o
+
+
+.vscode/
+*.lock
