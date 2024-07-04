@@ -1,3 +1,59 @@
+# ESP-IDF + Arduino + Bluepad32 + MPU9250 + ArduinoJson
+
+This repo includes submoduled. To clone this repo
+```bash
+git clone --recursive https://github.com/KARS-kwt/esp-idf-arduino-rover.git
+```
+
+### Adding esp-idf component library (Example ArduinoJSON)
+
+If the library is configred with esp-idf component compatibility (look for `idf_component.yml` and a `CMakeLists.txt` file in the root of the library repo)
+
+Navigate to `components` and add it as a submodule (you can also git clone it, but then the repo will be heavier unnecessarily)
+
+```bash
+components> git submodule add https://github.com/bblanchon/ArduinoJson.git
+```
+
+Then, in the project's `main/CMakeLists.txt`, add the library as a requirement (add "ArduinoJson")
+```cmake
+set(requires "bluepad32" "bluepad32_arduino" "arduino" "btstack" "ArduinoJson")
+```
+
+### Adding arduino library (Example ESP32-Arduino-MPU9250)
+(This needs to be redone if edits are made to the arduino submodule which are not synced to this repo)
+
+Not all libraries are configured as esp-idf components, but can still be added as a standard arduino library. To do this, navigate to `components\arduino\libraries` and clone (or add submodule) the library repo there. 
+
+```bash
+components\arduino\libraries> git clone https://github.com/yelvlab/ESP32-Arduino-MPU9250.git MPU9250/
+```
+> Notice the renaming of the repo to `MPU9250` to match the library header name.
+
+Next, add the source files of the library into `components\arduino\CMakeLists.txt`, in two locations. One for the source files and one for searching the headers. 
+
+```cmake
+set(LIBRARY_SRCS
+  libraries/MPU9250/I2Cbus.cpp <---
+  libraries/MPU9250/MPU9250.cpp <---
+  ...
+```
+
+```cmake
+set(includedirs
+  variants/${CONFIG_ARDUINO_VARIANT}/
+  cores/esp32/
+  libraries/MPU9250/  <---
+  ...
+```
+
+
+
+
+-----
+Forked from the following repo: https://gitlab.com/ricardoquesada/esp-idf-arduino-bluepad32-template.git
+
+
 # ESP-IDF + Arduino + Bluepad32 template app
 
 [![discord](https://img.shields.io/discord/775177861665521725.svg)](https://discord.gg/r5aMn6Cw5q)
