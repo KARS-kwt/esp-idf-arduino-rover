@@ -6,3 +6,5 @@ sdkconfig
 
 .vscode/
 *.lock
+
+scripts/env/
