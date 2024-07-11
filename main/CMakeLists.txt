@@ -3,7 +3,8 @@ set(srcs
         # "AltitudeSensor.cpp"
         # "AttitudeSensor.cpp"
         "GamePad.cpp"
-        "sketch.cpp"
+        # "sketch.cpp"
+        "diff_drive_json.cpp"
         # "mpu9250_compass_example.cpp"
         # "arduinojson_example.cpp"
         )

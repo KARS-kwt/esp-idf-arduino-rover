@@ -37,33 +37,6 @@ class JoystickHandler:
                 self.quit()
             elif event.type == KEYDOWN and event.key in [K_ESCAPE, K_q]:
                 self.quit()
-            # elif event.type == JOYAXISMOTION:
-            #     if event.axis < 2:  # Usually axes 0 and 1 are for the left stick
-            #         if event.axis == 0:
-            #             self.state.leftStick['x'] = event.value
-            #         elif event.axis == 1:
-            #             self.state.leftStick['y'] = event.value
-            #     elif event.axis >= 2:  # Axes 2 and 3 are usually the right stick
-            #         if event.axis == 2:
-            #             self.state.rightStick['x'] = event.value
-            #         elif event.axis == 3:
-            #             self.state.rightStick['y'] = event.value
-            # elif event.type == JOYBUTTONDOWN:
-            #     if event.button == 0:
-            #         self.state.A = True
-            #     elif event.button == 1:
-            #         self.state.B = True
-            #     elif event.button == 2:
-            #         self.state.B = True
-            #     elif event.button == 3:
-            #         self.state.B = True
-                
-            # elif event.type == JOYBUTTONUP:
-            #     # Reset button
-            #     if event.button == 0:
-            #         self.state.A = False
-            #     elif event.button == 1:
-            #         self.state.B = False
             else:
                 self.state.leftStick['x'] = self.joystick.get_axis(0)
                 self.state.leftStick['y'] = self.joystick.get_axis(1)
